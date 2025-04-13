@@ -49,42 +49,53 @@ function App() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Genlogs User Portal</h1>
-      <input
-        type="text"
-        placeholder="From (City)"
-        value={fromCity}
-        onChange={(e) => setFromCity(e.target.value)}
-        className="mb-4 p-2 border border-gray-300 rounded"
-      />
-      <input
-        type="text"
-        placeholder="To (City)"
-        value={toCity}
-        onChange={(e) => setToCity(e.target.value)}
-        className="mb-4 p-2 border border-gray-300 rounded"
-      />
-      <button onClick={handleSearch} className="bg-blue-500 text-white p-2 rounded">Search</button>
-      <div className="mt-4">
-        <h2 className="text-xl">Carriers:</h2>
-        <ul>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold text-center mb-6">Genlogs User Portal</h1>
+      <div className="mb-6 bg-white p-4 rounded shadow-md">
+        <div className="flex flex-col md:flex-row justify-between mb-4">
+          <div className="flex flex-grow">
+            <input
+              type="text"
+              placeholder="From (City)"
+              value={fromCity}
+              onChange={(e) => setFromCity(e.target.value)}
+              className="mb-4 md:mb-0 md:w-1/2 p-2 border border-gray-300 rounded mr-2"
+            />
+            <input
+              type="text"
+              placeholder="To (City)"
+              value={toCity}
+              onChange={(e) => setToCity(e.target.value)}
+              className="md:w-1/2 p-2 border border-gray-300 rounded mr-2"
+            />
+            <button onClick={handleSearch} className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded w-1/4">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="mt-6 bg-white p-4 rounded shadow-md">
+        <h2 className="text-xl font-semibold">Carriers:</h2>
+        <ul className="list-disc pl-5">
           {carriers.map((carrier, index) => (
-            <li key={index}>
+            <li key={index} className="mb-2">
               {carrier.name} ({carrier.trucks} Trucks/Day)
             </li>
           ))}
         </ul>
       </div>
-      <LoadScript googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}>
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          center={mapCenter}
-          zoom={8}
-        >
-          <Marker position={mapCenter} />
-        </GoogleMap>
-      </LoadScript>
+      <div className="mt-6 bg-white p-4 rounded shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Map:</h2>
+        <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={mapCenter}
+            zoom={8}
+          >
+            <Marker position={mapCenter} />
+          </GoogleMap>
+        </LoadScript>
+      </div>
     </div>
   );
 }
