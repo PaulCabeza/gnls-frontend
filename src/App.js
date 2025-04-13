@@ -1,10 +1,22 @@
 import React, { useState } from 'react';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import './App.css';
+
+const mapContainerStyle = {
+  height: "400px",
+  width: "100%"
+};
+
+const center = {
+  lat: 37.7749, // Coordenadas de San Francisco
+  lng: -122.4194
+};
 
 function App() {
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
   const [carriers, setCarriers] = useState([]);
+  const [mapCenter, setMapCenter] = useState(center);
 
   const handleSearch = () => {
     // Simulación de datos
@@ -27,6 +39,13 @@ function App() {
 
     const results = mockData[fromCity]?.[toCity] || [];
     setCarriers(results);
+
+    // Change the map location according to selected toCity
+    if (fromCity === "New York" && toCity === "Washington DC") {
+      setMapCenter({ lat: 38.8951, lng: -77.0364 }); // Load Washington DC on the map
+    } else if (fromCity === "San Francisco" && toCity === "Los Angeles") {
+      setMapCenter({ lat: 34.0522, lng: -118.2437 }); // Load Los Ángeles on the map
+    }
   };
 
   return (
@@ -57,6 +76,15 @@ function App() {
           ))}
         </ul>
       </div>
+      <LoadScript googleMapsApiKey={process.env.GOOGLE_MAPS_API_KEY}>
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          center={mapCenter}
+          zoom={8}
+        >
+          <Marker position={mapCenter} />
+        </GoogleMap>
+      </LoadScript>
     </div>
   );
 }
