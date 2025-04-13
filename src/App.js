@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, Autocomplete, DirectionsRenderer } from '@react-google-maps/api';
 import './App.css';
 
 const libraries = ['places'];
@@ -20,6 +20,7 @@ function App() {
   const [mapCenter, setMapCenter] = useState(center);
   const [mapEmbedUrl, setMapEmbedUrl] = useState('');
   const [showRoutes, setShowRoutes] = useState(false);
+  const [routes, setRoutes] = useState([]);
   const fromAutocompleteRef = useRef(null);
   const toAutocompleteRef = useRef(null);
 
@@ -53,8 +54,24 @@ function App() {
     const embedKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
     if (fromCity && toCity) {
       const url = `https://www.google.com/maps/embed/v1/directions?key=${embedKey}&origin=${encodeURIComponent(fromCity)}&destination=${encodeURIComponent(toCity)}`;
-      setMapEmbedUrl(url);
-      setShowRoutes(true);
+      const directionsService = new window.google.maps.DirectionsService();
+      directionsService.route(
+        {
+          origin: fromCity,
+          destination: toCity,
+          travelMode: window.google.maps.TravelMode.DRIVING,
+          provideRouteAlternatives: true,
+        },
+        (result, status) => {
+          if (status === 'OK') {
+            setRoutes(result.routes);
+            setShowRoutes(true);
+          } else {
+            console.error('Directions request failed:', status);
+          }
+        }
+      );
+
     }
 
 
@@ -86,7 +103,7 @@ function App() {
                   placeholder="From (City)"
                   value={fromCity}
                   onChange={(e) => setFromCity(e.target.value)}
-                  className="border border-gray-300 rounded p-2 w-full sm:w-1/4"
+                  className="border border-gray-300 rounded p-2 w-full sm:w-1/3"
                 />
               </Autocomplete>
 
@@ -104,7 +121,7 @@ function App() {
                   placeholder="To (City)"
                   value={toCity}
                   onChange={(e) => setToCity(e.target.value)}
-                  className="border border-gray-300 rounded p-2 w-full sm:w-1/4"
+                  className="border border-gray-300 rounded p-2 w-full sm:w-1/3"
                 />
               </Autocomplete>
 
@@ -137,17 +154,34 @@ function App() {
               <Marker position={mapCenter} />
             </GoogleMap>
           ) : (
-            <iframe
-              title="routes"
-              src={mapEmbedUrl}
-              width="100%"
-              height="400"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="rounded"
-            ></iframe>
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              center={mapCenter}
+              zoom={7}
+              options={{
+                zoomControl: true,
+                mapTypeControl: true,
+                streetViewControl: true,
+                fullscreenControl: true
+              }}
+            >
+              {routes.map((route, idx) => (
+                <DirectionsRenderer
+                  key={idx}
+                  directions={{ routes: [route], request: {}, geocoded_waypoints: [] }}
+                  options={{
+                    polylineOptions: {
+                      strokeColor: ['#4285F4', '#DB4437', '#F4B400'][idx % 3], // colores distintos
+                      strokeOpacity: 0.7,
+                      strokeWeight: 5
+                    },
+                    suppressMarkers: idx !== 0 // solo la primera ruta muestra marcadores
+                  }}
+                />
+              ))}
+            </GoogleMap>
+
+
           )}
         </div>
 
