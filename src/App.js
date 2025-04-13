@@ -15,6 +15,7 @@ const center = {
 function App() {
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
+  const [date, setDate] = useState('');
   const [carriers, setCarriers] = useState([]);
   const [mapCenter, setMapCenter] = useState(center);
 
@@ -50,30 +51,35 @@ function App() {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-center mb-6">Genlogs User Portal</h1>
-      <div className="mb-6 bg-white p-4 rounded shadow-md">
-        <div className="flex flex-col md:flex-row justify-between mb-4">
-          <div className="flex flex-grow">
+      <section className="bg-white dark:bg-gray-900">
+        <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
+          <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            Genlogs User Portal
+          </h1>
+          <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
+            Here at Genlogs, we focus on connecting you with the best carriers for your logistics needs.
+          </p>
+          <div className="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
             <input
               type="text"
               placeholder="From (City)"
               value={fromCity}
               onChange={(e) => setFromCity(e.target.value)}
-              className="mb-4 md:mb-0 md:w-1/2 p-2 border border-gray-300 rounded mr-2"
+              className="border border-gray-300 rounded p-2 w-full sm:w-1/4"
             />
             <input
               type="text"
               placeholder="To (City)"
               value={toCity}
               onChange={(e) => setToCity(e.target.value)}
-              className="md:w-1/2 p-2 border border-gray-300 rounded mr-2"
+              className="border border-gray-300 rounded p-2 w-full sm:w-1/4"
             />
             <button onClick={handleSearch} className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded w-1/4">
               Search
             </button>
           </div>
         </div>
-      </div>
+      </section>
       <div className="mt-6 bg-white p-4 rounded shadow-md">
         <h2 className="text-xl font-semibold">Carriers:</h2>
         <ul className="list-disc pl-5">
