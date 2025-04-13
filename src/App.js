@@ -23,6 +23,7 @@ function App() {
   const [routes, setRoutes] = useState([]);
   const fromAutocompleteRef = useRef(null);
   const toAutocompleteRef = useRef(null);
+  const routeColors = ['#4285F4', '#DB4437', '#F4B400'];
 
   const handleSearch = () => {
     const mockData = {
@@ -64,7 +65,15 @@ function App() {
         },
         (result, status) => {
           if (status === 'OK') {
-            setRoutes(result.routes);
+            const individualRoutes = result.routes.map((r) => ({
+              fullResult: {
+                geocoded_waypoints: result.geocoded_waypoints,
+                request: result.request,
+                routes: [r],
+              },
+            }));
+            setRoutes(individualRoutes);
+
             setShowRoutes(true);
           } else {
             console.error('Directions request failed:', status);
@@ -168,22 +177,46 @@ function App() {
               {routes.map((route, idx) => (
                 <DirectionsRenderer
                   key={idx}
-                  directions={{ routes: [route], request: {}, geocoded_waypoints: [] }}
+                  directions={route.fullResult}
                   options={{
                     polylineOptions: {
-                      strokeColor: ['#4285F4', '#DB4437', '#F4B400'][idx % 3], // colores distintos
+                      strokeColor: routeColors[idx % routeColors.length],
                       strokeOpacity: 0.7,
                       strokeWeight: 5
                     },
-                    suppressMarkers: idx !== 0 // solo la primera ruta muestra marcadores
+                    suppressMarkers: idx !== 0
                   }}
                 />
               ))}
+
             </GoogleMap>
 
 
           )}
         </div>
+
+
+        {showRoutes && (
+          <div className="mt-6 bg-white p-4 rounded shadow-md">
+            <h2 className="text-xl font-semibold mb-2">Detalles de las rutas:</h2>
+            {routes.map((route, idx) => (
+              <div key={idx} className="mb-4 p-4 bg-gray-100 rounded">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: routeColors[idx % routeColors.length] }}></div>
+                  <h3 className="font-semibold text-lg">Ruta #{idx + 1}</h3>
+                </div>
+
+                <p><strong>Resumen:</strong> {route.fullResult.routes[0].summary}</p>
+                <p><strong>Duración:</strong> {route.fullResult.routes[0].legs[0].duration.text}</p>
+                <p><strong>Distancia:</strong> {route.fullResult.routes[0].legs[0].distance.text}</p>
+
+              </div>
+            ))}
+          </div>
+        )}
+
+
+
 
       </div>
     </LoadScript>
