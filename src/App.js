@@ -18,8 +18,10 @@ function App() {
   const [toCity, setToCity] = useState('');
   const [carriers, setCarriers] = useState([]);
   const [mapCenter, setMapCenter] = useState(center);
+  const [mapEmbedUrl, setMapEmbedUrl] = useState('');
+  const [showRoutes, setShowRoutes] = useState(false);
   const fromAutocompleteRef = useRef(null);
-  const toAutocompleteRef = useRef(null);  
+  const toAutocompleteRef = useRef(null);
 
   const handleSearch = () => {
     const mockData = {
@@ -46,7 +48,16 @@ function App() {
       setMapCenter({ lat: 38.8951, lng: -77.0364 });
     } else if (fromCity === "San Francisco" && toCity === "Los Angeles") {
       setMapCenter({ lat: 34.0522, lng: -118.2437 });
+    };
+
+    const embedKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+    if (fromCity && toCity) {
+      const url = `https://www.google.com/maps/embed/v1/directions?key=${embedKey}&origin=${encodeURIComponent(fromCity)}&destination=${encodeURIComponent(toCity)}`;
+      setMapEmbedUrl(url);
+      setShowRoutes(true);
     }
+
+
   };
 
   return (
@@ -117,14 +128,29 @@ function App() {
 
         <div className="mt-6 bg-white p-4 rounded shadow-md">
           <h2 className="text-xl font-semibold mb-4">Map:</h2>
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            center={mapCenter}
-            zoom={10}
-          >
-            <Marker position={mapCenter} />
-          </GoogleMap>
+          {!showRoutes ? (
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              center={mapCenter}
+              zoom={10}
+            >
+              <Marker position={mapCenter} />
+            </GoogleMap>
+          ) : (
+            <iframe
+              title="routes"
+              src={mapEmbedUrl}
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="rounded"
+            ></iframe>
+          )}
         </div>
+
       </div>
     </LoadScript>
   );
