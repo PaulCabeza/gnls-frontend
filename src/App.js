@@ -198,7 +198,7 @@ function App() {
               <div key={idx} className="mb-4 p-4 bg-gray-100 rounded">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-4 h-4 rounded-full" style={{ backgroundColor: routeColors[idx % routeColors.length] }}></div>
-                  <h3 className="font-semibold text-lg">Ruta #{idx + 1}</h3>
+                  <h3 className="font-semibold text-lg">Route #{idx + 1}</h3>
                 </div>
 
                 <p><strong>Name:</strong> {route.fullResult.routes[0].summary}</p>
