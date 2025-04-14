@@ -26,25 +26,23 @@ function App() {
   const routeColors = ['#4285F4', '#DB4437', '#F4B400'];
 
   const handleSearch = () => {
-    const mockData = {
-      "New York": {
-        "Washington DC": [
-          { name: "Knight-Swift Transport Services", trucks: 10 },
-          { name: "J.B. Hunt Transport Services Inc", trucks: 7 },
-          { name: "YRC Worldwide", trucks: 5 }
-        ]
-      },
-      "San Francisco, CA, USA": {
-        "Los Angeles, CA, USA": [
-          { name: "XPO Logistics", trucks: 9 },
-          { name: "Schneider", trucks: 6 },
-          { name: "Landstar Systems", trucks: 2 }
-        ]
-      }
-    };
+    const normalizedFrom = fromCity.split(',')[0].trim();
+    const normalizedTo = toCity.split(',')[0].trim();
 
-    const results = mockData[fromCity]?.[toCity] || [];
-    setCarriers(results);
+    fetch(`http://localhost:8000/search?from_city=${encodeURIComponent(normalizedFrom)}&to_city=${encodeURIComponent(normalizedTo)}`)
+      .then(response => response.json())
+      .then(data => {
+        const formattedCarriers = data.map(carrier => ({
+          name: carrier.name,
+          trucks: carrier.trucks_per_day
+        }));
+        setCarriers(formattedCarriers);
+      })
+      .catch(error => {
+        console.error("Error fetching carriers:", error);
+        setCarriers([]);
+      });
+
 
     if (fromCity === "New York" && toCity === "Washington DC") {
       setMapCenter({ lat: 38.8951, lng: -77.0364 });
