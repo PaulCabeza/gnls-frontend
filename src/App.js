@@ -17,8 +17,7 @@ function App() {
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
   const [carriers, setCarriers] = useState([]);
-  const [mapCenter, setMapCenter] = useState(center);
-  const [mapEmbedUrl, setMapEmbedUrl] = useState('');
+  const [mapCenter, setMapCenter] = useState(center);  
   const [showRoutes, setShowRoutes] = useState(false);
   const [routes, setRoutes] = useState([]);
   const fromAutocompleteRef = useRef(null);
@@ -51,8 +50,7 @@ function App() {
     };
 
     const embedKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-    if (fromCity && toCity) {
-      const url = `https://www.google.com/maps/embed/v1/directions?key=${embedKey}&origin=${encodeURIComponent(fromCity)}&destination=${encodeURIComponent(toCity)}`;
+    if (fromCity && toCity) {      
       const directionsService = new window.google.maps.DirectionsService();
       directionsService.route(
         {
