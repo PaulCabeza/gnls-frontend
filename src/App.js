@@ -28,7 +28,7 @@ function App() {
     const normalizedFrom = fromCity.split(',')[0].trim();
     const normalizedTo = toCity.split(',')[0].trim();
 
-    fetch(`http://localhost:8000/search?from_city=${encodeURIComponent(normalizedFrom)}&to_city=${encodeURIComponent(normalizedTo)}`)
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/search?from_city=${encodeURIComponent(normalizedFrom)}&to_city=${encodeURIComponent(normalizedTo)}`)
       .then(response => response.json())
       .then(data => {
         const formattedCarriers = data.map(carrier => ({
