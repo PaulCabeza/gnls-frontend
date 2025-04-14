@@ -193,7 +193,7 @@ function App() {
 
         {showRoutes && (
           <div className="mt-6 bg-white p-4 rounded shadow-md">
-            <h2 className="text-xl font-semibold mb-2">Detalles de las rutas:</h2>
+            <h2 className="text-xl font-semibold mb-2">Routes Detail:</h2>
             {routes.map((route, idx) => (
               <div key={idx} className="mb-4 p-4 bg-gray-100 rounded">
                 <div className="flex items-center gap-2 mb-2">
@@ -201,9 +201,9 @@ function App() {
                   <h3 className="font-semibold text-lg">Ruta #{idx + 1}</h3>
                 </div>
 
-                <p><strong>Resumen:</strong> {route.fullResult.routes[0].summary}</p>
-                <p><strong>Duración:</strong> {route.fullResult.routes[0].legs[0].duration.text}</p>
-                <p><strong>Distancia:</strong> {route.fullResult.routes[0].legs[0].distance.text}</p>
+                <p><strong>Name:</strong> {route.fullResult.routes[0].summary}</p>
+                <p><strong>Duration:</strong> {route.fullResult.routes[0].legs[0].duration.text}</p>
+                <p><strong>Distance:</strong> {route.fullResult.routes[0].legs[0].distance.text}</p>
 
               </div>
             ))}
