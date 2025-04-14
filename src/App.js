@@ -48,8 +48,7 @@ function App() {
     } else if (fromCity === "San Francisco" && toCity === "Los Angeles") {
       setMapCenter({ lat: 34.0522, lng: -118.2437 });
     };
-
-    const embedKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+    
     if (fromCity && toCity) {      
       const directionsService = new window.google.maps.DirectionsService();
       directionsService.route(
