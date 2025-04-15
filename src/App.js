@@ -17,7 +17,7 @@ function App() {
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
   const [carriers, setCarriers] = useState([]);
-  const [mapCenter, setMapCenter] = useState(center);  
+  const [mapCenter] = useState(center);  
   const [showRoutes, setShowRoutes] = useState(false);
   const [routes, setRoutes] = useState([]);
   const fromAutocompleteRef = useRef(null);
