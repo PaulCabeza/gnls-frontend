@@ -28,7 +28,12 @@ function App() {
     const normalizedFrom = fromCity.split(',')[0].trim();
     const normalizedTo = toCity.split(',')[0].trim();
 
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/search?from_city=${encodeURIComponent(normalizedFrom)}&to_city=${encodeURIComponent(normalizedTo)}`)
+    let finalToCity = normalizedTo;
+    if (finalToCity === "Washington") {
+      finalToCity = "Washington DC";
+    }
+
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/search?from_city=${encodeURIComponent(normalizedFrom)}&to_city=${encodeURIComponent(finalToCity)}`)
       .then(response => response.json())
       .then(data => {
         const formattedCarriers = data.map(carrier => ({
@@ -42,13 +47,6 @@ function App() {
         setCarriers([]);
       });
 
-
-    if (fromCity === "New York" && toCity === "Washington DC") {
-      setMapCenter({ lat: 38.8951, lng: -77.0364 });
-    } else if (fromCity === "San Francisco" && toCity === "Los Angeles") {
-      setMapCenter({ lat: 34.0522, lng: -118.2437 });
-    };
-    
     if (fromCity && toCity) {      
       const directionsService = new window.google.maps.DirectionsService();
       directionsService.route(
